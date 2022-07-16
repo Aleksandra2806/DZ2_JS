@@ -1,49 +1,34 @@
-let game = document.querySelector('.game'),
-	result = document.querySelector('.result'),
-	btnGame = document.querySelector('.new_game'),
-	fields = document.querySelectorAll('.field'),
-	step = true,
-	count = 0,
-	circle = `<svg class="circle">
-				<circle r="40" cx="50" cy="50" stroke="blue" stroke-width="10" fill="none" stroke-linecap="round" />
-			  </svg>`,
-	cross = `<svg class="cross">
-				<line x1="15" y1="15" x2="90" y2="90" stroke="red" stroke-width="10" stroke-linecap="round" />
-				<line x1="90" y1="15" x2="15" y2="90" stroke="red" stroke-width="10" stroke-linecap="round" />
-			</svg>`;
+let fields = document.querySelectorAll('.field');
+let result = document.querySelector('.result')
 
-function ticTacToe(elem) {
-	if(step) stepCross(elem.target);
-	else stepCircle(elem.target);
-	step = !step;
-	win();
-}
+tictactoe(fields);
 
-function stepCross(target) {
-	target.innerHTML = cross;
-	target.classList.add('x')
-	count ++
-}
+function tictactoe(fields) {
+  let i = 0;
+  for (let field of fields) {
+	field.addEventListener('click', function step() {
+	  if (i % 2 == 0) {
+	    this.innerHTML = 'X';
+	  } else {
+	    this.innerHTML = 'O';
+	  }
 
-function stepCircle(target) {
-	target.innerHTML = circle;
-	target.classList.add('o')
-	count ++
-}
-
-function newGame() {
-	step = true;
-	count = 0;
-	result.innerText = '';
-	fields.forEach(item => {
-		item.innerHTML = '';
-		item.classList.remove('x', 'o');
+	  this.removeEventListener('click', step);
+			
+	  if (winningGame(fields)) {
+		result.innerHTML = 'Победили ' + this.innerHTML;
+	  } else if (i == 8) {
+	    result.innerHTML = 'Ничья';
+	  }
+	i++;
 	});
-	game.addEventListener('click', ticTacToe);
+  }
 }
 
-function win() {
-	let version  = [
+// Проверка на выход из игры
+
+function winningGame(fields) {
+	let combinations = [
 		[0, 1, 2],
 		[3, 4, 5],
 		[6, 7, 8],
@@ -52,31 +37,23 @@ function win() {
 		[2, 5, 8],
 		[0, 4, 8],
 		[2, 4, 6]
-	];
-	for (let i = 0; i < version.length; i++) {
-		if (fields[version [i][0]].classList.contains('x') &&
-			fields[version [i][1]].classList.contains('x') &&
-			fields[version [i][2]].classList.contains('x')) {
-			{
-			result.innerText = 'Выиграли X';
+	]
+	for (let i = 0; i < combinations.length; i++) {
+		let comb = combinations[i];
+		if (fields[comb[0]].innerHTML == fields[comb[1]].innerHTML &&
+			fields[comb[1]].innerHTML == fields[comb[2]].innerHTML &&
+			fields[comb[0]].innerHTML != '') {
+				return true;
 			}
-			game.removeEventListener('click', ticTacToe);
-		}
-		else if (fields[version[i][0]].classList.contains('o') &&
-			fields[version[i][1]].classList.contains('o') &&
-			fields[version[i][2]].classList.contains('o')) {
-			{
-			result.innerText = 'Выиграли O';
-			}
-			game.removeEventListener('click', ticTacToe);
-		}
-		else if (count == 9) {
-			result.innerText = 'Ничья';
-			game.removeEventListener('click', ticTacToe);
-		}
 	}
+	return false;
 }
+// новая игра
 
-game.addEventListener('click', ticTacToe)
-btnGame.addEventListener('click', newGame)
-			
+function newGame() {
+	result.innerHTML = '';
+	fields.forEach(elem => {
+		elem.innerHTML = '';
+	});
+	fields.addEventListener('click',tictactoe(fields));
+}	
