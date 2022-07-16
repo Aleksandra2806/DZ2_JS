@@ -20,7 +20,7 @@ function tictactoe(fields) {
 	  } else if (i == 8) {
 	    result.innerHTML = 'Ничья';
 	  }
-	i++;
+	  i++;
 	});
   }
 }
@@ -29,31 +29,31 @@ function tictactoe(fields) {
 
 function winningGame(fields) {
 	let combinations = [
-		[0, 1, 2],
-		[3, 4, 5],
-		[6, 7, 8],
-		[0, 3, 6],
-		[1, 4, 7],
-		[2, 5, 8],
-		[0, 4, 8],
-		[2, 4, 6]
+	  [0, 1, 2],
+	  [3, 4, 5],
+	  [6, 7, 8],
+	  [0, 3, 6],
+	  [1, 4, 7],
+	  [2, 5, 8],
+	  [0, 4, 8],
+	  [2, 4, 6]
 	]
 	for (let i = 0; i < combinations.length; i++) {
-		let comb = combinations[i];
-		if (fields[comb[0]].innerHTML == fields[comb[1]].innerHTML &&
-			fields[comb[1]].innerHTML == fields[comb[2]].innerHTML &&
-			fields[comb[0]].innerHTML != '') {
-				return true;
-			}
+	  let comb = combinations[i];
+	  if (fields[comb[0]].innerHTML == fields[comb[1]].innerHTML &&
+		  fields[comb[1]].innerHTML == fields[comb[2]].innerHTML &&
+		  fields[comb[0]].innerHTML != '') {
+		    return true;
+	  }
 	}
 	return false;
 }
 // новая игра
 
 function newGame() {
-	result.innerHTML = '';
-	fields.forEach(elem => {
-		elem.innerHTML = '';
-	});
-	fields.addEventListener('click',tictactoe(fields));
+  result.innerHTML = '';
+  fields.forEach(elem => {
+	elem.innerHTML = '';
+  });
+  fields.addEventListener('click',tictactoe(fields));
 }	
